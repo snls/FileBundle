@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}FileUpload Create{% endblock %}
+{% block body %}
+    <h2>Загрузка файлов</h2>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button>Загрузить</button>
+    {{ form_end(form) }}
+{% endblock %}
