@@ -17,5 +17,5 @@ interface LoaderFactoryInterface
      * @param $directory
      * @return boolean
      */
-    public function upload($file /* file object */, $directory = 'file_directories' /* directory when save file */);
+    public function upload($file /* file object */, $directory = 'file.image.directorie' /* directory when save file */);
 }

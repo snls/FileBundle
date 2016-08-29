@@ -1,2 +1,3 @@
 parameters:
-    file_directories: 'uploads/files'
+    file.image.directorie: 'uploads/files/images'
+    file.book.directorie: 'uploads/files/books'

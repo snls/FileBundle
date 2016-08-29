@@ -14,7 +14,7 @@ use FileBundle\Image\ImageProduct;
 
 class ImageFactory implements LoaderFactoryInterface
 {
-    public function upload($file /* file object */, $directory = 'file_directories' /* directory when save file */)
+    public function upload($file /* file object */, $directory = 'file.image.directorie' /* directory when save file */)
     {
         return new ImageProduct($file, $directory);
     }

@@ -10,7 +10,7 @@ namespace FileBundle\FileUpload;
 
 class BookFactory implements LoaderFactoryInterface
 {
-    public function upload($file /* file object */, $directory = 'file_directories' /* directory when save file */)
+    public function upload($file /* file object */, $directory = 'file.book.directorie' /* directory when save file */)
     {
         
     }
