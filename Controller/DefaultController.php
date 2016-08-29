@@ -3,6 +3,7 @@
 namespace FileBundle\Controller;
 
 use FileBundle\Entity\File;
+use FileBundle\FileUpload\Uploader;
 use FileBundle\Form\FileUploadType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -33,16 +34,12 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $fileT = $file->getName();
-            $fileN = md5(uniqid()).'.'.$fileT->guessExtension();
-            $fileT->move(
-                $this->getParameter('file_directories'),
-                $fileN
-            );
-            $file->setName($fileN);
+            $loadFile = Uploader::getLoader("image");
+            // загрузка нового файла и создание объекта с файлом
+            $file = $loadFile->upload($file);
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($file);
+            $em->persist($file->getFile());
             $em->flush();
 
             return $this->redirectToRoute('file_list');
