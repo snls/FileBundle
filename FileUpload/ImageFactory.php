@@ -10,6 +10,7 @@ namespace FileBundle\FileUpload;
 
 
 use FileBundle\Entity\File;
+use FileBundle\Image\ImageProduct;
 
 class ImageFactory implements LoaderFactoryInterface
 {

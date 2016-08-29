@@ -6,7 +6,7 @@
  * Time: 22:32
  */
 
-namespace FileBundle\FileUpload;
+namespace FileBundle\Image;
 
 
 use FileBundle\Entity\File;
