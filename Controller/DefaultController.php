@@ -8,6 +8,7 @@ use FileBundle\Form\FileUploadType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use FileBundle\FileUpload\Image\ImageResize;
 
 class DefaultController extends Controller
 {
@@ -18,6 +19,19 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getRepository("FileBundle:File");
         $files = $em->findAll();
+        
+        /*
+        $img = new ImageResize();
+        foreach ($files as $file) {
+            $img->load($this->getParameter('web_dir').'/'
+                    .$this->getParameter('file.image.directorie')
+                    .'/'.$file->getName())
+                ->adaptive_resize(200)
+                ->save($this->getParameter('web_dir').'/'
+                    .$this->getParameter('file.image.directorie')
+                    .'/'.'butterfly-flip-both.jpg');
+        }
+        */
 
         return $this->render('FileBundle:Default:index.html.twig', [
             'files' => $files
@@ -37,11 +51,8 @@ class DefaultController extends Controller
             $loadFile = Uploader::getLoader("image");
             // загрузка нового файла и создание объекта с файлом
             $file = $loadFile->upload($file);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($file->getFile());
-            $em->flush();
-
+            // сохранение картинки
+            $this->get('EntityServices')->persist($file->getFile());
             return $this->redirectToRoute('file_list');
         }
 

@@ -1,3 +1,4 @@
 parameters:
     file.image.directorie: 'uploads/files/images'
     file.book.directorie: 'uploads/files/books'
+    web_dir: '%kernel.root_dir%/../web'

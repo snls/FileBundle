@@ -13,15 +13,11 @@ use FileBundle\Entity\File;
 use FileBundle\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Validator\Constraints\Image;
-
 
 class ImageProduct
 {
-
     /**
      * @var File
      */
@@ -64,14 +60,14 @@ class ImageProduct
      */
     public function upload()
     {
+        // validation images
+        $this->validation();
         // generate filename
         $this->generateFilename($this->file->getName());
         // moving file
         $this->moveFile($this->file->getName(), $this->directory);
         // set new name for file
         $this->file->setName($this->fileName);
-        // validation images
-        $this->validation();
     }
 
     protected $fileName;
@@ -109,7 +105,7 @@ class ImageProduct
                 $this->fileName
             );
     }
-    
+
     protected function validation()
     {}
 }

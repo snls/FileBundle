@@ -10,9 +10,7 @@ namespace FileBundle\DependencyInjection;
 
 
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Config\Tests\FileLocatorTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class Container
@@ -22,7 +20,7 @@ class Container
     public function __construct(ContainerBuilder $container = null)
     {
         $this->container = $container;
-
+        
         $loader = new YamlFileLoader($container, new FileLocator(
             __DIR__.'/../Resources/config'
         ));

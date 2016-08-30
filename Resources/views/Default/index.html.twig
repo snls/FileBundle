@@ -3,7 +3,25 @@
 {% block title %}FileUpload List{% endblock %}
 {% block body %}
     <h2>Список файлов <small><a href="/file/create">добавить</a></small> </h2>
-    {% for file in files %}
-        <img src="{{ asset('uploads/files/' ~ file.name) }}" width="500" height="500">
-    {% endfor %}
+    <div class="images">
+        {% for file in files %}
+            <img src="{{ asset('uploads/files/images/' ~ file.name) }}" class="image">
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        img.image {
+            width: 200px;
+            border: 1px solid darkgrey;
+            border-radius: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+
+    </script>
 {% endblock %}

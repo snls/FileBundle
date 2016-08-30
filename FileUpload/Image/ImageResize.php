@@ -10,6 +10,7 @@
  */
 
 namespace FileBundle\FileUpload\Image;
+use FileBundle\Entity\File;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
@@ -18,7 +19,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  * @package SimpleImage
  *
  */
-class SimpleImage {
+class ImageResize {
 
     /**
      * @var int Default output image quality
@@ -26,39 +27,27 @@ class SimpleImage {
      */
     public $quality = 80;
 
-    protected $image, $filename, $original_info, $width, $height, $imagestring, $mimetype;
+    /**
+     * @var string
+     */
+    protected $filename;
+
+    protected $image, $original_info, $width, $height, $imagestring, $mimetype;
 
     /**
      * Create instance and load an image, or create an image from scratch
      *
-     * @param null|string   $filename   Path to image file (may be omitted to create image from scratch)
-     * @param int           $width      Image width (is used for creating image from scratch)
-     * @param int|null      $height     If omitted - assumed equal to $width (is used for creating image from scratch)
-     * @param null|string   $color      Hex color string, array(red, green, blue) or array(red, green, blue, alpha).
-     *                                  Where red, green, blue - integers 0-255, alpha - integer 0-127<br>
-     *                                  (is used for creating image from scratch)
+     * @param string   $filename   Path to image file (may be omitted to create image from scratch)
      *
-     * @return SimpleImage
      * @throws Exception
      *
      */
-    function __construct($filename = null, $width = null, $height = null, $color = null) {
-        if ($filename) {
+    function __construct($filename = NULL) {
+        if(!empty($filename)) {
             $this->load($filename);
-        } elseif ($width) {
-            $this->create($width, $height, $color);
         }
-        return $this;
-    }
 
-    /**
-     * Destroy image resource
-     *
-     */
-    function __destruct() {
-        if( $this->image !== null && get_resource_type($this->image) === 'gd' ) {
-            imagedestroy($this->image);
-        }
+        return $this;
     }
 
     /**
@@ -236,40 +225,6 @@ class SimpleImage {
         $alpha = $this->keep_within(127 - (127 * $opacity), 0, 127);
         imagefilter($this->image, IMG_FILTER_COLORIZE, $this->keep_within($rgba['r'], 0, 255), $this->keep_within($rgba['g'], 0, 255), $this->keep_within($rgba['b'], 0, 255), $alpha);
         return $this;
-    }
-
-    /**
-     * Create an image from scratch
-     *
-     * @param int           $width  Image width
-     * @param int|null      $height If omitted - assumed equal to $width
-     * @param null|string   $color  Hex color string, array(red, green, blue) or array(red, green, blue, alpha).
-     *                              Where red, green, blue - integers 0-255, alpha - integer 0-127
-     *
-     * @return SimpleImage
-     *
-     */
-    function create($width, $height = null, $color = null) {
-
-        $height = $height ?: $width;
-        $this->width = $width;
-        $this->height = $height;
-        $this->image = imagecreatetruecolor($width, $height);
-        $this->original_info = array(
-            'width' => $width,
-            'height' => $height,
-            'orientation' => $this->get_orientation(),
-            'exif' => null,
-            'format' => 'png',
-            'mime' => 'image/png'
-        );
-
-        if ($color) {
-            $this->fill($color);
-        }
-
-        return $this;
-
     }
 
     /**
@@ -532,7 +487,7 @@ class SimpleImage {
      *
      * @param string        $filename   Path to image file
      *
-     * @return SimpleImage
+     * @return ImageResize
      * @throws Exception
      *
      */
@@ -543,24 +498,6 @@ class SimpleImage {
             throw new Exception('Required extension GD is not loaded.');
         }
         $this->filename = $filename;
-        return $this->get_meta_data();
-    }
-
-    /**
-     * Load a base64 string as image
-     *
-     * @param string        $filename   base64 string
-     *
-     * @return SimpleImage
-     *
-     */
-    function load_base64($base64string) {
-        if (!extension_loaded('gd')) {
-            throw new Exception('Required extension GD is not loaded.');
-        }
-        //remove data URI scheme and spaces from base64 string then decode it
-        $this->imagestring = base64_decode(str_replace(' ', '+',preg_replace('#^data:image/[^;]+;base64,#', '', $base64string)));
-        $this->image = imagecreatefromstring($this->imagestring);
         return $this->get_meta_data();
     }
 
@@ -633,7 +570,7 @@ class SimpleImage {
                 $mimetype = 'image/png';
                 break;
             default:
-                $info = (empty($this->imagestring)) ? getimagesize($this->filename) : getimagesizefromstring($this->imagestring);
+                $info = getimagesize($this->filename);
                 $mimetype = $info['mime'];
                 unset($info);
                 break;
@@ -1222,7 +1159,7 @@ class SimpleImage {
      */
     protected function get_meta_data() {
         //gather meta data
-        if(empty($this->imagestring)) {
+        if(!empty($this->filename)) {
             $info = getimagesize($this->filename);
 
             switch ($info['mime']) {
@@ -1239,8 +1176,6 @@ class SimpleImage {
                     throw new Exception('Invalid image: '.$this->filename);
                     break;
             }
-        } elseif (function_exists('getimagesizefromstring')) {
-            $info = getimagesizefromstring($this->imagestring);
         } else {
             throw new Exception('PHP 5.4 is required to use method getimagesizefromstring');
         }
