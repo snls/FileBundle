@@ -28,6 +28,12 @@ class File
      */
     private $name;
 
+    /**
+     * @var string
+     * @ORM\Column(name="preview", type="string", length=255)
+     */
+    private $preview;
+
 
     /**
      * Get id
@@ -61,6 +67,30 @@ class File
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set name preview
+     *
+     * @param string $name
+     *
+     * @return File
+     */
+    public function setPreview($name)
+    {
+        $this->preview = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name preview
+     *
+     * @return string
+     */
+    public function getPreview()
+    {
+        return $this->preview;
     }
 }
 

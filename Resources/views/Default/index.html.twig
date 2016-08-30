@@ -5,7 +5,7 @@
     <h2>Список файлов <small><a href="/file/create">добавить</a></small> </h2>
     <div class="images">
         {% for file in files %}
-            <img src="{{ asset('uploads/files/images/' ~ file.name) }}" class="image">
+            <img src="{{ asset('uploads/files/images/' ~ file.preview) }}" class="image">
         {% endfor %}
     </div>
 {% endblock %}

@@ -2,13 +2,12 @@
 
 namespace FileBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FileBundle\Entity\File;
 use FileBundle\FileUpload\Uploader;
 use FileBundle\Form\FileUploadType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use FileBundle\FileUpload\Image\ImageResize;
 
 class DefaultController extends Controller
 {
